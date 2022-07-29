@@ -1,0 +1,70 @@
+{"venues":[{
+    "veunue_id":1,
+    "coordinates":[
+        52.51647225,
+        13.3930750985125],
+    "name":"Alte Bibliothek",
+    "type":"architecture",
+     "outdoor":"true",
+     "indoor":"false",
+     "public_access":"true",
+     "description":"very nice",
+     "address":"Bebelplatz 2",
+     "city":"Berlin",
+     "img": "",
+     "long":13.3930750985125,
+     "lat": 52.51647225
+},
+{
+    "veunue_id":2,
+    "coordinates":[
+        52.5180987,
+        13.3975001390468],
+    "name":"Zeughaus",
+    "type":"architecture",
+     "outdoor":"true",
+     "indoor":"false",
+     "public_access":"true",
+     "description":"very nice",
+     "address":"Unter den Linden 2",
+     "city":"Berlin",
+     "img": "",
+     "long": 13.3975001390468,
+     "lat": 52.5180987
+},{
+    "veunue_id":3,
+    "coordinates":[
+        52.57842725,
+        13.4056464451622],
+    "name":"Schloss Schönhausen",
+    "type":"architecture",
+     "outdoor":"true",
+     "indoor":"false",
+     "public_access":"true",
+     "description":"very nice",
+     "address":"Tschaikowskistraße 1",
+     "city":"Berlin",
+     "img": "",
+     "long":13.4056464451622,
+     "lat": 52.57842725
+
+},
+{
+    "veunue_id":4,
+    "coordinates":[
+        52.5018949,
+        13.3962311679724],
+    "name":"Jüdisches Museum Berlin",
+    "type":"painting",
+     "outdoor":"true",
+     "indoor":"false",
+     "public_access":"true",
+     "description":"very nice",
+     "address":"Lindenstraße 9–14",
+     "city":"Berlin",
+     "img": "",
+     "long":13.3962311679724,
+     "lat": 52.5018949
+
+}
+]}
