@@ -21,29 +21,14 @@ import "leaflet-easybutton/src/easy-button.css";
 import "font-awesome/css/font-awesome.min.css";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Locator from "./Locator";
+import AddNewPinForm from "./AddNewPinForm";
+import PinCard from "./PinCard";
 
 function App() {
-  const [activeVenue, setActiveVenue] = useState(null);
   const [pins, setPins] = useState([]);
-  //const [newPlace, setNewPlace] = useState(null);
   const [positions, setPositions] = useState(null);
-  // const [name, setName] = useState(null);
-  // const [type, setType] = useState(null);
-  // const [description, setDescription] = useState(null);
-  // const [public_access, setPublic_access] = useState(true);
-  // const [indoor, setIndoor] = useState(false);
-  // const [address, setAddress] = useState(null);
-  // const [city, setCity] = useState(null);
-  // const [rating, setRating] = useState(0);
-  const nameRef = useRef(null);
-  const typeRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const public_accessRef = useRef(null);
-  const indoorRef = useRef(null);
-  const addressRef = useRef(null);
-  const cityRef = useRef(null);
-  const ratingRef = useRef(0);
-  const [currentPlaceId, setCurrentPlaceId] = useState(null);
+  const [currentPlace, setCurrentPlace] = useState(null);
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
 
@@ -138,54 +123,9 @@ function App() {
   //console.log(positions);
   //console.log(centerLatLng);
 
-  const handleSubmit = async (e) => {
-    //async
-    e.preventDefault();
-    const newPin = {
-      // username: currentUsername,
-      name: nameRef.current.value,
-      description: descriptionRef.current.value,
-      type: typeRef.current.value,
-      rating: ratingRef.current.value, //star
-      address: addressRef.current.value,
-      // public_access,
-      // indoor,
-      city: cityRef.current.value,
-      lat: positions[0],
-      long: positions[1],
-    };
-    try {
-      const res = await axios.post("http://localhost:8000/api/pins", newPin);
-      setPins([...pins, res.data]); //
-      setPositions(null);
-      //console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   //console.log(pins);
-
-  //console.log(currentPlaceId);
-  function MyComponent() {
-    const map = useMapEvents({
-      click: () => {
-        map.locate({
-          setView: true,
-          watch: true,
-        });
-      },
-      locationfound: (location) => {
-        console.log("location found:", location);
-      },
-    });
-    return null;
-  }
-  function Button() {
-    return <button>HEY</button>;
-  }
   return (
     <div>
-      <Button />
       <MapContainer
         center={centerLatLng} //[52.5170365, 13.37691] centerLatLng
         zoom={13}
@@ -229,22 +169,20 @@ function App() {
             <Marker
               key={venue.veunue_id}
               position={[venue.lat, venue.long]}
-              eventHandlers={{ click: (e) => setCurrentPlaceId(venue) }} //setActiveVenue(venue)
+              eventHandlers={{
+                click: (e) => {
+                  setCurrentPlace(venue);
+                  setPositions(null);
+                },
+              }}
               icon={
                 venue.type === "architecture" ? coolMarkerArc : coolMarkerPaint
               }
             />
           ))}
-        {currentPlaceId && (
-          <Popup position={[currentPlaceId.lat, currentPlaceId.long]}>
-            <div className="card">
-              <h2>{currentPlaceId.name}</h2>
-              <p>{currentPlaceId.description}</p>
-              <span>
-                {currentPlaceId.address} in {currentPlaceId.city}
-              </span>
-              <p className="date">Created {format(currentPlaceId.createdAt)}</p>
-            </div>
+        {currentPlace && (
+          <Popup position={[currentPlace.lat, currentPlace.long]}>
+            <PinCard currentPlace={currentPlace} />
           </Popup>
         )}
 
@@ -253,82 +191,17 @@ function App() {
             position={[positions[0], positions[1]]}
             eventHandlers={{ click: (e) => console.log("Hy") }}
           >
-            <div className="card">
-              <form onSubmit={handleSubmit}>
-                <label>Name</label>
-                <input
-                  ref={nameRef}
-                  name="name"
-                  type="text"
-                  placeholder="enter a name"
-                  //onChange={(e) => setName(e.target.value)}
-                />
-                <label>Type</label>
-                <select ref={typeRef} name="" id="">
-                  {/*onChange={(e) => setType(e.target.value)}*/}
-                  <option value="architecture">Architecture</option>
-                  <option value="painting">Painitng</option>
-                  <option value="sulpture">Sulpture</option>
-                  <option value="music">Music</option>
-                  <option value="other">other</option>
-                </select>
-                <label>Description</label>
-                <textarea
-                  ref={descriptionRef}
-                  type="text"
-                  placeholder="enter a name"
-                  //onChange={(e) => setDescription(e.target.value)}
-                />
-                <label>Public Acces ?</label>
-                <input
-                  ref={public_accessRef}
-                  type="checkbox"
-                  //onChange={(e) => setPublic_access(e.target.value)}
-                />
-                <label>Indoor ?</label>
-                <input
-                  ref={indoorRef}
-                  type="checkbox"
-                  //onChange={(e) => setIndoor(e.target.value)}
-                />
-                <label>Address</label>
-                <input
-                  ref={addressRef}
-                  type="text"
-                  placeholder="enter the address"
-                  //onChange={(e) => setAddress(e.target.value)}
-                />
-                <label>City</label>
-                <input
-                  ref={cityRef}
-                  type="text"
-                  placeholder="enter the city"
-                  //onChange={(e) => setCity(e.target.value)}
-                />
-                <label>Rating </label>
-                <select ref={ratingRef} name="" id="">
-                  {/* onChange={(e) => setRating(e.target.value)} */}
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-
-                <button type="submit" className="submitButton">
-                  {" "}
-                  Add Venue
-                </button>
-              </form>
-            </div>
+            <AddNewPinForm
+              onSetPins={setPins}
+              onSetPositions={setPositions}
+              positions={positions}
+              pins={pins}
+            />
           </Popup>
         )}
         <LocationMarker positions={positions} setPositions={setPositions} />
-        <Closer
-          setPositions={setPositions}
-          setCurrentPlaceId={setCurrentPlaceId}
-        />
-        <MyComponent />
+        <Closer setPositions={setPositions} setCurrentPlace={setCurrentPlace} />
+        {/* <Locator /> */}
       </MapContainer>
     </div>
   );

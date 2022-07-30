@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Marker, useMapEvents } from "react-leaflet";
 
-function Closer({ setPositions, setCurrentPlaceId }) {
+function Closer({ setPositions, setCurrentPlace }) {
   useMapEvents({
     click(ev) {
       setPositions(null);
-      setCurrentPlaceId(null);
+      setCurrentPlace(null);
     },
   });
   return null;
