@@ -24,6 +24,10 @@ import L from "leaflet";
 import Locator from "./Locator";
 import AddNewPinForm from "./AddNewPinForm";
 import PinCard from "./PinCard";
+import { geosearch } from "esri-leaflet-geocoder";
+import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css";
+import Control from "react-leaflet-custom-control";
+import MyLocationFinder from "./MyLocationFinder";
 
 function App() {
   const [pins, setPins] = useState([]);
@@ -31,18 +35,8 @@ function App() {
   const [currentPlace, setCurrentPlace] = useState(null);
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
-
-  //"fa-map-marker"
-  // useEffect(() => {
-  //   if (!map) return;
-
-  //   L.easyButton("fa-map-marker",() => {
-  //     map.locate().on("locationfound", function (e) {
-  //       setPosition(e.latlng);
-  //       map.flyTo(e.latlng, map.getZoom());
-  //     });
-  //   }).addTo(map);
-  // }, [map]);
+  const [locationButton, setLocationButton] = useState(false);
+  const mapRef = useRef();
 
   useEffect(() => {
     const getPins = async () => {
@@ -55,8 +49,6 @@ function App() {
     };
     getPins();
   }, []);
-
-  const mapRef = useRef();
 
   // useEffect(() => {
   //   console.log("Hallo");
@@ -124,14 +116,70 @@ function App() {
   //console.log(centerLatLng);
 
   //console.log(pins);
+  //ref={mapRef}
+  // const circleBlue = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
+  //   weight: 1,
+  //   color: "blue",
+  //   fillColor: "#cacaca",
+  //   fillOpacity: 0.2,
+  // });
+
+  // useEffect(() => {
+  //   //function locator3() {
+  //   if (!map) return;
+  //   map
+  //     .locate({
+  //       setView: true,
+  //       watch: true,
+  //     }) /* This will return map so you can do chaining */
+  //     .on("locationfound", function (e) {
+  //       // var marker = L.marker([e.latitude, e.longitude]).bindPopup(
+  //       //   "Your are here :)"
+  //       // );
+  //       const circleBlue = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
+  //         weight: 1,
+  //         color: "blue",
+  //         fillColor: "#cacaca",
+  //         fillOpacity: 0.2,
+  //       });
+  //       //map.addLayer(marker);
+  //       map.addLayer(circleBlue);
+
+  //       //setLocationButton(false);
+  //     });
+  //   map.stop();
+  //   setLocationButton(false);
+
+  // map &&
+  //   setTimeout(() => {
+  //     map.off("locationfound");
+  //     setLocationButton(false);
+  //   }, 2000);
+  //}
+  // map && locator3();
+  // }, [locationButton === true]);
+  console.log(locationButton);
+
+  // // .on("locationerror", function (e) {
+  //   console.log(e);
+  //   alert("Location access denied.");
+  // });
+  //}
+  // ,
+  // locationfound: (location) => {
+  //   console.log("location found:", location);
+  // },
+  //   });
+  // }
+
   return (
     <div>
       <MapContainer
         center={centerLatLng} //[52.5170365, 13.37691] centerLatLng
         zoom={13}
         scrollWheelZoom={false}
-        ref={mapRef}
-        whenCreated={setMap}
+        ref={setMap}
+        //whenCreated={setMap}
       >
         <LayersControl>
           <BaseLayer name={"OpenStreetMap"} checked>
@@ -199,9 +247,30 @@ function App() {
             />
           </Popup>
         )}
+        <Control position="topleft">
+          <button
+            onClick={() => {
+              setLocationButton(true);
+              setPosition(null);
+            }}
+          >
+            HALLO
+          </button>
+        </Control>
         <LocationMarker positions={positions} setPositions={setPositions} />
-        <Closer setPositions={setPositions} setCurrentPlace={setCurrentPlace} />
+        <Closer
+          setPositions={setPositions}
+          setCurrentPlace={setCurrentPlace}
+          map={map}
+        />
         {/* <Locator /> */}
+        {locationButton === true && (
+          <MyLocationFinder
+            onSetLocationButton={setLocationButton}
+            position={position}
+            onSetPosition={setPosition}
+          />
+        )}
       </MapContainer>
     </div>
   );

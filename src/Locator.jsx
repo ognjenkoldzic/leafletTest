@@ -12,6 +12,7 @@ function Locator() {
       console.log("location found:", location);
     },
   });
+
   return null;
 }
 export default Locator;

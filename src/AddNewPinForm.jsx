@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
+import "./App.css";
 
 function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
   const nameRef = useRef(null);
@@ -10,28 +11,52 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
   const addressRef = useRef(null);
   const cityRef = useRef(null);
   const ratingRef = useRef(0);
+  const ImageRef = useRef(null);
+  const [fileName, setFileName] = useState("pinImage");
 
+  const onChangeFile = (e) => {
+    setFileName(e.target.files[0]);
+  };
+  console.log(fileName);
   const handleSubmit = async (e) => {
-    //async
     e.preventDefault();
-    const newPin = {
-      // username: currentUsername,
-      name: nameRef.current.value,
-      description: descriptionRef.current.value,
-      type: typeRef.current.value,
-      rating: ratingRef.current.value, //star
-      address: addressRef.current.value,
-      // public_access,
-      // indoor,
-      city: cityRef.current.value,
-      lat: positions[0],
-      long: positions[1],
+    // const newPin = {
+    //   // username: currentUsername,
+    //   name: nameRef.current.value,
+    //   description: descriptionRef.current.value,
+    //   type: typeRef.current.value,
+    //   rating: ratingRef.current.value, //star
+    //   address: addressRef.current.value,
+    //   // public_access,
+    //   // indoor,
+    //   city: cityRef.current.value,
+    //   lat: positions[0],
+    //   long: positions[1],
+    // };
+    const formData = new FormData();
+    formData.append("name", nameRef.current.value);
+    formData.append("description", descriptionRef.current.value);
+    formData.append("type", typeRef.current.value);
+    formData.append("rating", ratingRef.current.value);
+    formData.append("address", addressRef.current.value);
+    formData.append("city", cityRef.current.value);
+    formData.append("lat", positions[0]);
+    formData.append("long", positions[1]);
+    formData.append("pinImage", fileName);
+    // formData.append("",)
+    // formData.append("",)
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
     };
+
     try {
-      const res = await axios.post("http://localhost:8000/api/pins", newPin);
+      const res = await axios.post(
+        "http://localhost:8000/api/pins",
+        formData,
+        config
+      );
       onSetPins([...pins, res.data]); //
       onSetPositions(null);
-      //console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -39,18 +64,23 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
 
   return (
     <div className="card">
-      <form onSubmit={handleSubmit}>
-        <label>Name</label>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <label htmlFor="imageUp">Image</label>
+        <input
+          type="file"
+          name="imageUp"
+          filename="pinImage"
+          onChange={onChangeFile}
+        />
+        <label>Name *</label>
         <input
           ref={nameRef}
           name="name"
           type="text"
           placeholder="enter a name"
-          //onChange={(e) => setName(e.target.value)}
         />
-        <label>Type</label>
+        <label>Type *</label>
         <select ref={typeRef} name="" id="">
-          {/*onChange={(e) => setType(e.target.value)}*/}
           <option value="architecture">Architecture</option>
           <option value="painting">Painitng</option>
           <option value="sulpture">Sulpture</option>
@@ -58,41 +88,17 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
           <option value="other">other</option>
         </select>
         <label>Description</label>
-        <textarea
-          ref={descriptionRef}
-          type="text"
-          placeholder="enter a name"
-          //onChange={(e) => setDescription(e.target.value)}
-        />
+        <textarea ref={descriptionRef} type="text" placeholder="enter a name" />
         <label>Public Acces ?</label>
-        <input
-          ref={public_accessRef}
-          type="checkbox"
-          //onChange={(e) => setPublic_access(e.target.value)}
-        />
+        <input ref={public_accessRef} type="checkbox" />
         <label>Indoor ?</label>
-        <input
-          ref={indoorRef}
-          type="checkbox"
-          //onChange={(e) => setIndoor(e.target.value)}
-        />
+        <input ref={indoorRef} type="checkbox" />
         <label>Address</label>
-        <input
-          ref={addressRef}
-          type="text"
-          placeholder="enter the address"
-          //onChange={(e) => setAddress(e.target.value)}
-        />
-        <label>City</label>
-        <input
-          ref={cityRef}
-          type="text"
-          placeholder="enter the city"
-          //onChange={(e) => setCity(e.target.value)}
-        />
+        <input ref={addressRef} type="text" placeholder="enter the address" />
+        <label>City *</label>
+        <input ref={cityRef} type="text" placeholder="enter the city" />
         <label>Rating </label>
         <select ref={ratingRef} name="" id="">
-          {/* onChange={(e) => setRating(e.target.value)} */}
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>

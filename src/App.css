@@ -5,7 +5,7 @@
 
 form {
   width: 250px;
-  height: 350px;
+  height: 450px;
 
   display: flex;
   flex-direction: column;
@@ -42,4 +42,8 @@ textarea {
   color: white;
   background-color: tomato;
   cursor: pointer;
+}
+
+.inputImg {
+  height: 4em;
 }
