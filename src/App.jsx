@@ -233,7 +233,12 @@ function App() {
           ))}
         {currentPlace && (
           <Popup position={[currentPlace.lat, currentPlace.long]}>
-            <PinCard currentPlace={currentPlace} />
+            <PinCard
+              currentPlace={currentPlace}
+              pins={pins}
+              onSetPins={setPins}
+              onSetCurrentPlace={setCurrentPlace}
+            />
           </Popup>
         )}
         {positions && (
