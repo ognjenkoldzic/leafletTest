@@ -38,10 +38,11 @@ function App() {
   const [locationButton, setLocationButton] = useState(false);
   const mapRef = useRef();
 
+  // "https://young-fortress-38538.herokuapp.com/api/pins"
   useEffect(() => {
     const getPins = async () => {
       try {
-        const allPins = await axios.get("http://localhost:8000/api/pins");
+        const allPins = await axios.get("http://localhost:8001/api/pins");
         setPins(allPins.data);
       } catch (err) {
         console.log(err);
@@ -49,7 +50,7 @@ function App() {
     };
     getPins();
   }, []);
-
+  console.log(pins);
   // useEffect(() => {
   //   console.log("Hallo");
   //   if (mapRef.current) {
@@ -213,18 +214,18 @@ function App() {
           </LayersControl.Overlay>
         </LayersControl>
         {pins &&
-          pins.map((venue) => (
+          pins.map((pin) => (
             <Marker
-              key={venue.veunue_id}
-              position={[venue.lat, venue.long]}
+              key={pin._id}
+              position={[pin.lat, pin.long]}
               eventHandlers={{
                 click: (e) => {
-                  setCurrentPlace(venue);
+                  setCurrentPlace(pin);
                   setPositions(null);
                 },
               }}
               icon={
-                venue.type === "architecture" ? coolMarkerArc : coolMarkerPaint
+                pin.type === "architecture" ? coolMarkerArc : coolMarkerPaint
               }
             />
           ))}
@@ -233,7 +234,6 @@ function App() {
             <PinCard currentPlace={currentPlace} />
           </Popup>
         )}
-
         {positions && (
           <Popup
             position={[positions[0], positions[1]]}

@@ -42,19 +42,19 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
     formData.append("city", cityRef.current.value);
     formData.append("lat", positions[0]);
     formData.append("long", positions[1]);
-    formData.append("pinImage", fileName);
+    //formData.append("pinImage", fileName);
     // formData.append("",)
     // formData.append("",)
-    const config = {
-      headers: { "content-type": "multipart/form-data" },
-    };
+    // const config = {
+    //   headers: {
+    //     // "content-type": "multipart/form-data",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Credentials": true,
+    //   },
+    // };
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/pins",
-        formData,
-        config
-      );
+      const res = await axios.post("http://localhost:8001/api/pins", formData);
       onSetPins([...pins, res.data]); //
       onSetPositions(null);
     } catch (err) {
