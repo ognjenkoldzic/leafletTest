@@ -38,11 +38,13 @@ function App() {
   const [locationButton, setLocationButton] = useState(false);
   const mapRef = useRef();
 
-  // "https://young-fortress-38538.herokuapp.com/api/pins"
+  // http://localhost:8001/api/pins
   useEffect(() => {
     const getPins = async () => {
       try {
-        const allPins = await axios.get("http://localhost:8001/api/pins");
+        const allPins = await axios.get(
+          "https://young-fortress-38538.herokuapp.com/api/pins"
+        );
         setPins(allPins.data);
       } catch (err) {
         console.log(err);

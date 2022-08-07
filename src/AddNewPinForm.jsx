@@ -41,9 +41,13 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
     //     "Access-Control-Allow-Credentials": true,
     //   },
     // };
+    //http://localhost:8001/api/pins
 
     try {
-      const res = await axios.post("http://localhost:8001/api/pins", formData);
+      const res = await axios.post(
+        "https://young-fortress-38538.herokuapp.com/api/pins",
+        formData
+      );
 
       onSetPins([...pins, res.data]);
       onSetPositions(null);
