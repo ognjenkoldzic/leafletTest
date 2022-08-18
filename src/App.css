@@ -47,3 +47,15 @@ textarea {
 .inputImg {
   height: 4em;
 }
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0.3em;
+}
+.card h2 {
+  font-size: 2em;
+  text-align: center;
+  margin: 0.3em;
+  font-family: "Helvetia", sans-serif;
+}

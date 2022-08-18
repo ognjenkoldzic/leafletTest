@@ -34,19 +34,21 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
     formData.append("pinImage", fileName);
     // formData.append("",)
     // formData.append("",)
-    // const config = {
-    //   headers: {
-    //     // "content-type": "multipart/form-data",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Credentials": true,
-    //   },
-    // };
+    const config = {
+      headers: {
+        // "content-type": "multipart/form-data",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+    };
     //http://localhost:8001/api/pins
+    //        "https://young-fortress-38538.herokuapp.com/api/pins",
 
     try {
       const res = await axios.post(
         "https://young-fortress-38538.herokuapp.com/api/pins",
-        formData
+        formData,
+        config
       );
 
       onSetPins([...pins, res.data]);
@@ -59,6 +61,7 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
   //console.log(data);
   return (
     <div className="card">
+      <h2>Add New Venue:</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label htmlFor="image">Image</label>
         <input
@@ -84,11 +87,15 @@ function AddNewPinForm({ onSetPins, onSetPositions, positions, pins }) {
           <option value="other">other</option>
         </select>
         <label>Description</label>
-        <textarea ref={descriptionRef} type="text" placeholder="enter a name" />
-        <label>Public Acces ?</label>
+        <textarea
+          ref={descriptionRef}
+          type="text"
+          placeholder="enter a description"
+        />
+        {/* <label>Public Acces ?</label>
         <input ref={public_accessRef} type="checkbox" />
         <label>Indoor ?</label>
-        <input ref={indoorRef} type="checkbox" />
+        <input ref={indoorRef} type="checkbox" /> */}
         <label>Address</label>
         <input ref={addressRef} type="text" placeholder="enter the address" />
         <label>City *</label>

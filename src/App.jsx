@@ -7,7 +7,6 @@ import {
 } from "react-leaflet";
 import { Marker, Popup, useMapEvents } from "react-leaflet"; //
 import { useState, useEffect, useRef } from "react";
-import * as venues from "../mockupData.json";
 import "./App.css";
 import { Icon } from "leaflet";
 import architectureMarker from "./assets/icons8-greek-pillar-50.png";
@@ -38,12 +37,20 @@ function App() {
   const [locationButton, setLocationButton] = useState(false);
   const mapRef = useRef();
 
-  // http://localhost:8001/api/pins
+  // http://localhost:8001/api/pins //https://young-fortress-38538.herokuapp.com/api/pins
+  const config = {
+    headers: {
+      // "content-type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+    },
+  };
   useEffect(() => {
     const getPins = async () => {
       try {
         const allPins = await axios.get(
-          "https://young-fortress-38538.herokuapp.com/api/pins"
+          "https://young-fortress-38538.herokuapp.com/api/pins",
+          config
         );
         setPins(allPins.data);
       } catch (err) {
@@ -52,35 +59,7 @@ function App() {
     };
     getPins();
   }, []);
-  console.log(pins);
-  // useEffect(() => {
-  //   console.log("Hallo");
-  //   if (mapRef.current) {
-  //     const map = mapRef.current;
-  //     map
-  //       .locate({
-  //         setView: true,
-  //         watch: true,
-  //       }) /* This will return map so you can do chaining */
-  //       .on("locationfound", function (e) {
-  //         var marker = L.marker([e.latitude, e.longitude]).bindPopup(
-  //           "Your are here :)"
-  //         );
-  //         var circle = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
-  //           weight: 1,
-  //           color: "blue",
-  //           fillColor: "#cacaca",
-  //           fillOpacity: 0.2,
-  //         });
-  //         map.addLayer(marker);
-  //         map.addLayer(circle);
-  //       })
-  //       .on("locationerror", function (e) {
-  //         console.log(e);
-  //         alert("Location access denied.");
-  //       });
-  //   }
-  // }, [mapRef]);
+  // console.log(pins);
 
   const coolMarkerArc = new L.Icon({
     iconUrl: architectureMarker,
@@ -161,7 +140,6 @@ function App() {
   //}
   // map && locator3();
   // }, [locationButton === true]);
-  console.log(locationButton);
 
   // // .on("locationerror", function (e) {
   //   console.log(e);
@@ -197,7 +175,7 @@ function App() {
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
           </BaseLayer>
-          <LayersControl.Overlay name="Marker with popup">
+          {/* <LayersControl.Overlay name="Marker with popup">
             <LayerGroup>
               <BaseLayer name={"SateliteName"}>
                 <TileLayer
@@ -213,7 +191,7 @@ function App() {
                 />
               </BaseLayer>
             </LayerGroup>
-          </LayersControl.Overlay>
+          </LayersControl.Overlay> */}
         </LayersControl>
         {pins &&
           pins.map((pin) => (
@@ -259,9 +237,10 @@ function App() {
             onClick={() => {
               setLocationButton(true);
               setPosition(null);
+              setCurrentPlace(null);
             }}
           >
-            HALLO
+            LOCATE ME
           </button>
         </Control>
         <LocationMarker positions={positions} setPositions={setPositions} />

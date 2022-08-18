@@ -9,7 +9,9 @@ export default function PinCard({
   pins,
   onSetPins,
 }) {
+  // `http://localhost:8001/api/pins/${id}`//`https://young-fortress-38538.herokuapp.com/api/pins/${id}`
   const handleDelete = async (id) => {
+    //console.log(id);
     try {
       const res = await axios.delete(
         `https://young-fortress-38538.herokuapp.com/api/pins/${id}`
@@ -37,7 +39,9 @@ export default function PinCard({
       ) : (
         <img src={dummyImg} alt="nur ein dummy" width="150" />
       )}
-      <button onClick={() => handleDelete(currentPlace._id)}>Delete Pin</button>
+      <button onClick={() => handleDelete(currentPlace._id)}>
+        Delete Venue
+      </button>
     </div>
   );
 }
